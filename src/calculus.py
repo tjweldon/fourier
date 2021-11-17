@@ -81,4 +81,27 @@ class NumericIntegral:
             yield Rectangle(interval, height)
 
     def __float__(self) -> float:
-        return float(functools.reduce(operator.add, (float(rect) for rect in self.rectangles)))
+        return float(functools.reduce(operator.add, (rect.area for rect in self.rectangles)))
+
+
+class Curve:
+    def __init__(self, function: RealFunction):
+        self._function = function
+
+    def at(self, x: float) -> float:
+        return self._function(x)
+
+    def __call__(self, x: float) -> float:
+        return self.at(x)
+
+    def integrate(self, interval: Interval, precision: float) -> float:
+        return float(NumericIntegral(interval, self, precision))
+
+    def integral_curve(self, precision) -> Curve:
+        return Curve(lambda x: self.integrate(Interval((0, x)), precision))
+
+    def gradient(self, position, precision) -> float:
+        return (self.at(position + precision/2) - self.at(position - precision/2))/precision
+
+    def differentiate(self, precision) -> Curve:
+        return Curve(lambda x: self.gradient(x, precision))
