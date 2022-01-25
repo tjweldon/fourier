@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import operator
-from typing import Optional, Callable, Generator
+from typing import Optional, Callable, Generator, Any
 
 import functools
 

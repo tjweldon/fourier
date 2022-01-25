@@ -1,9 +1,6 @@
 import math
 from src.calculus import Interval, Curve
-
-
-def main():
-    return fundamental_theorem_sanity_check()
+from src.periodic_functions import Period, PeriodicCurve
 
 
 def integral_sanity_check():
@@ -25,7 +22,7 @@ def indefinite_integral_sanity_check():
 
 
 def differential_sanity_check():
-    denominator = 100
+    denominator = 1000
     num_samples = 4
     x_points = [i / num_samples for i in range(1, num_samples + 1)]
     curve = Curve(lambda x: (x ** 3) / 3)
@@ -49,7 +46,35 @@ def fundamental_theorem_sanity_check():
     return gradients
 
 
+def get_periodic():
+    period = Period((0.5, 1.5))
+    curve = PeriodicCurve(lambda x: x**2, period)
+
+    return curve
+
+
+def vertical_curve_printer(curve: Curve, domain: Interval, sample_count: int = 20):
+    samples = [(n * float(domain)) / sample_count + domain.lower for n in range(sample_count)]
+    max_width = 50
+    scale_factor = max_width / max(*samples)
+    for x in samples:
+        position = round(scale_factor * curve.at(x))
+        line = [
+            f"{x}".rjust(20),
+            ("|" if position > 0 else ""),
+            " " * max(position - 2, 0),
+            "⊗"
+        ]
+        print("".join(line))
+
+
+def main():
+    return fundamental_theorem_sanity_check()
+
+
+
 if __name__ == '__main__':
-    _integrals = main()
-    for _integral in _integrals:
-        print(_integral)
+    # _integrals = main()
+    # for _integral in _integrals:
+    #     print(_integral)
+    vertical_curve_printer(get_periodic(), Interval((0, 3)), 50)
